@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: weather-api
+  datasource:
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+    generate-unique-name: false
+    name: weatherdb
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+        trace: true
+logging:
+  level:
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    org.springframework.jdbc: DEBUG
+
+open-weather-map:
+  hostname: api.openweathermap.org
+  path: /data/2.5/weather
+  appid: 56ba265aace93a49aa20d390c19c187e
