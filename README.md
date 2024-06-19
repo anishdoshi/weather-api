@@ -62,3 +62,4 @@ To run this application from terminal, run
 
 * Better concurrency handling on DB access
 * API KEY Auth only for `/weather` path. Currently `/h2-console` is blocked due to this
+* Use RestDocs to document API.
