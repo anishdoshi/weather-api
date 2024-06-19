@@ -1,5 +1,6 @@
 package com.vanguard.codetest.weatherapi.dao.http;
 
+import com.vanguard.codetest.weatherapi.config.OpenWeatherMapConfig;
 import com.vanguard.codetest.weatherapi.dao.entity.WeatherInfo;
 import com.vanguard.codetest.weatherapi.exception.InvalidOpenWeatherMapRequestException;
 import org.junit.jupiter.api.Test;
@@ -27,13 +28,16 @@ class OpenWeatherMapDaoTest {
   @Autowired
   private MockRestServiceServer mockServer;
 
+  @Autowired
+  private OpenWeatherMapConfig openWeatherMapConfig;
+
   @Test
   void givenCityAndCountryIsRequested_whenGetWeatherInfoCalled_thenBothCityAndCountryAreRequestedToOpenWeatherMap() {
     this.mockServer
       .expect(request -> assertEquals("/data/2.5/weather", request.getURI().getPath()))
       .andExpect(method(HttpMethod.GET))
       .andExpect(queryParam("q", "London,uk"))
-      .andExpect(queryParam("appid", "56ba265aace93a49aa20d390c19c187e"))
+      .andExpect(queryParam("appid", openWeatherMapConfig.getAppid()))
       .andRespond(withStatus(HttpStatus.OK)
         .contentType(MediaType.APPLICATION_JSON)
         .body("responseBody"));
@@ -51,7 +55,7 @@ class OpenWeatherMapDaoTest {
       .expect(request -> assertEquals("/data/2.5/weather", request.getURI().getPath()))
       .andExpect(method(HttpMethod.GET))
       .andExpect(queryParam("q", "London"))
-      .andExpect(queryParam("appid", "56ba265aace93a49aa20d390c19c187e"))
+      .andExpect(queryParam("appid", openWeatherMapConfig.getAppid()))
       .andRespond(withStatus(HttpStatus.OK)
         .contentType(MediaType.APPLICATION_JSON)
         .body("responseBody"));
@@ -69,7 +73,7 @@ class OpenWeatherMapDaoTest {
       .expect(request -> assertEquals("/data/2.5/weather", request.getURI().getPath()))
       .andExpect(method(HttpMethod.GET))
       .andExpect(queryParam("q", "InvalidCity"))
-      .andExpect(queryParam("appid", "56ba265aace93a49aa20d390c19c187e"))
+      .andExpect(queryParam("appid", openWeatherMapConfig.getAppid()))
       .andRespond(withStatus(HttpStatus.BAD_REQUEST)
         .contentType(MediaType.APPLICATION_JSON)
         .body("errorBody"));

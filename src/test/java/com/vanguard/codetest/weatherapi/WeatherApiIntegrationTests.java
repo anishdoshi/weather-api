@@ -1,5 +1,6 @@
 package com.vanguard.codetest.weatherapi;
 
+import com.vanguard.codetest.weatherapi.config.OpenWeatherMapConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class WeatherApiIntegrationTests {
 
   @Autowired
   private MockRestServiceServer mockServer;
+
+  @Autowired
+  private OpenWeatherMapConfig openWeatherMapConfig;
 
   @BeforeEach
   void setUp() {
@@ -70,7 +74,7 @@ public class WeatherApiIntegrationTests {
       .expect(request -> assertEquals("/data/2.5/weather", request.getURI().getPath()))
       .andExpect(method(HttpMethod.GET))
       .andExpect(queryParam("q", "Melbourne"))
-      .andExpect(queryParam("appid", "56ba265aace93a49aa20d390c19c187e"))
+      .andExpect(queryParam("appid", openWeatherMapConfig.getAppid()))
       .andRespond(withStatus(HttpStatus.OK)
         .contentType(MediaType.APPLICATION_JSON)
         .body("{\"weather\": [{\"description\": \"clear sky\"}]}"));
@@ -89,7 +93,7 @@ public class WeatherApiIntegrationTests {
       .expect(request -> assertEquals("/data/2.5/weather", request.getURI().getPath()))
       .andExpect(method(HttpMethod.GET))
       .andExpect(queryParam("q", "InvalidCity,uk"))
-      .andExpect(queryParam("appid", "56ba265aace93a49aa20d390c19c187e"))
+      .andExpect(queryParam("appid", openWeatherMapConfig.getAppid()))
       .andRespond(withStatus(HttpStatus.BAD_REQUEST)
         .contentType(MediaType.APPLICATION_JSON)
         .body("{\"cod\": \"404\", \"message\": \"city not found\"}"));
@@ -110,7 +114,7 @@ public class WeatherApiIntegrationTests {
       .expect(request -> assertEquals("/data/2.5/weather", request.getURI().getPath()))
       .andExpect(method(HttpMethod.GET))
       .andExpect(queryParam("q", "London,uk"))
-      .andExpect(queryParam("appid", "56ba265aace93a49aa20d390c19c187e"))
+      .andExpect(queryParam("appid", openWeatherMapConfig.getAppid()))
       .andRespond(withStatus(HttpStatus.OK)
         .contentType(MediaType.APPLICATION_JSON)
         .body("{\"weather\": [{\"description\": \"clear sky\"}]}"));
@@ -130,7 +134,7 @@ public class WeatherApiIntegrationTests {
       .expect(times(5), request -> assertEquals("/data/2.5/weather", request.getURI().getPath()))
       .andExpect(method(HttpMethod.GET))
       .andExpect(queryParam("q", "London"))
-      .andExpect(queryParam("appid", "56ba265aace93a49aa20d390c19c187e"))
+      .andExpect(queryParam("appid", openWeatherMapConfig.getAppid()))
       .andRespond(withStatus(HttpStatus.OK)
         .contentType(MediaType.APPLICATION_JSON)
         .body("{\"weather\": [{\"description\": \"clear sky\"}]}"));
