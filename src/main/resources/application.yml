@@ -23,4 +23,4 @@ logging:
 open-weather-map:
   hostname: api.openweathermap.org
   path: /data/2.5/weather
-  appid: 56ba265aace93a49aa20d390c19c187e
+  appid: <replace_with_app_id>
